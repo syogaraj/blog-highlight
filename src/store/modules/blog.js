@@ -14,7 +14,13 @@ const getters = {
     getEllipsedContent: () => (content) => {
         console.log(content);
         content = content || "";
-        return content.substring(0, 200) + '...'
+        let continuationSuffix = (content.length > 100) ? '...' : ""
+        return content.substring(0, 100) + continuationSuffix;
+    },
+
+    getFormattedTime: () => (createdOn) => {
+        let date = new Date(createdOn.seconds*1000);
+        return date.toLocaleDateString();
     }
 
 }
