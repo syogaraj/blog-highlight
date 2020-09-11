@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">Blog</div>
+      <v-toolbar-title>Blog Highlighter</v-toolbar-title>
 
       <v-spacer></v-spacer>
     </v-app-bar>
