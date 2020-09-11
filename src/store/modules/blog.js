@@ -11,6 +11,29 @@ const getters = {
         return state.blogPosts
     },
 
+    getBlogPost: state => (blogID) => {
+        return state.blogPosts.filter(blog => {
+            return blog.id == blogID
+        })[0];
+    },
+
+    getUserInitial: () => (userName) => {
+        let userNameSplit = userName.split(' ')
+        if (userNameSplit.length > 1) {
+            return userNameSplit[0].charAt(0).toUpperCase() + userNameSplit[1].charAt(0).toUpperCase();
+        }
+        return userName.charAt(0).toUpperCase();
+    },
+
+    getRandomColor() {
+        var letters = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    },
+
     getEllipsedContent: () => (content) => {
         console.log(content);
         content = content || "";
@@ -39,6 +62,7 @@ const actions = {
     },
 
     async createBlogPost({ state, dispatch, commit }, blogPost) {
+        blogPost.content = blogPost.content.replace('\n', '<br/>')
         await fb.postsCollection.add({
             createdOn: new Date(),
             title: blogPost.title,

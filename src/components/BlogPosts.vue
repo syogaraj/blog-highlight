@@ -11,13 +11,13 @@
         cols="3"
         v-for="blog in blogPosts"
         :key="blog.id"
-        @click="showBlog(blog)"
+        @click="$router.push({ name: 'blog.oneBlog', params: { id: blog.id, details: blog } })"
       >
         <v-card hover class="mx-auto mt-5 blogPosts" max-width="300">
           <v-card-text>
             <p class="display-1 text--primary">{{ blog.title }}</p>
             <p>By {{ blog.author }}</p>
-            <p>Posted on {{ postedTime(blog.createdOn)}}</p>
+            <p>Posted on {{ postedTime(blog.createdOn) }}</p>
             <div>{{ ellipsed(blog.content) }}</div>
           </v-card-text>
         </v-card>
@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #createBlogCard {
 	background-color: aliceblue;
 

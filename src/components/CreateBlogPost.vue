@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-dialog--active {
 	padding: 1rem 2rem;
     background-color: floralwhite;
