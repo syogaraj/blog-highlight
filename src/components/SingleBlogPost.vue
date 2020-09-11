@@ -15,7 +15,10 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>
-      <p id="blogTime">{{blogDetail.author}} wrote on {{ getFormattedTime(blogDetail.createdOn) }}</p>
+      <p id="blogTime">
+        {{ blogDetail.author }} wrote on
+        {{ getFormattedTime(blogDetail.createdOn) }}
+      </p>
       <v-divider />
       <div class="blogContent">
         <!-- {{ blogDetail.content }} -->

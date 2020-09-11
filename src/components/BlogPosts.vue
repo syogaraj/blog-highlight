@@ -11,7 +11,12 @@
         cols="3"
         v-for="blog in blogPosts"
         :key="blog.id"
-        @click="$router.push({ name: 'blog.oneBlog', params: { id: blog.id, details: blog } })"
+        @click="
+          $router.push({
+            name: 'blog.oneBlog',
+            params: { id: blog.id, details: blog }
+          })
+        "
       >
         <v-card hover class="mx-auto mt-5 blogPosts" max-width="300">
           <v-card-text>
