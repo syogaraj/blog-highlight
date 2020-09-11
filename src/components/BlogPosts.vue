@@ -1,8 +1,8 @@
 <template>
   <v-layout class="pa-10">
     <v-row dense style="max-width: 100%">
-      <v-col cols="3" @click="$router.push({ name: 'create' })">
-        <v-card class="mx-auto" max-width="300" id="createBlogCard">
+      <v-col cols="3" @click="$router.push({ name: 'blog.create' })">
+        <v-card class="mx-auto mt-5" max-width="300" id="createBlogCard">
           <v-icon id="createBlogIcon">mdi-plus</v-icon>
           <v-subheader>Create a new post</v-subheader>
         </v-card>
@@ -13,10 +13,11 @@
         :key="blog.id"
         @click="showBlog(blog)"
       >
-        <v-card class="mx-auto" max-width="300">
+        <v-card hover class="mx-auto mt-5 blogPosts" max-width="300">
           <v-card-text>
             <p class="display-1 text--primary">{{ blog.title }}</p>
             <p>By {{ blog.author }}</p>
+            <p>Posted on {{ postedTime(blog.createdOn)}}</p>
             <div>{{ ellipsed(blog.content) }}</div>
           </v-card-text>
         </v-card>
@@ -36,7 +37,8 @@ export default {
 	computed: {
 		...mapGetters("blog", {
 			blogPosts: "getBlogPosts",
-			ellipsed: "getEllipsedContent"
+            ellipsed: "getEllipsedContent",
+            postedTime: "getFormattedTime"
 		})
 	}
 };
@@ -55,5 +57,13 @@ export default {
 		margin-left: 5rem;
 		text-align: center;
 	}
+}
+
+.blogPosts {
+    min-height: calc(14rem + 5px);
+    max-height: calc(14rem + 5px);
+    text-overflow: ellipsis;
+    // overflow: hidden;
+    margin-top: 10px;
 }
 </style>
