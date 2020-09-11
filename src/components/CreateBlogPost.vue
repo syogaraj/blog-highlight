@@ -1,6 +1,6 @@
 <template>
   <!-- <div> -->
-  <v-dialog hide-overlay v-model="dialog" width="50%" persistent>
+  <v-dialog overlay v-model="dialog" width="40%" persistent>
     <v-form ref="form" v-model="valid" @submit.prevent="submitHandler">
       <v-text-field
         :rules="nameRules"
@@ -26,7 +26,7 @@
           <v-btn type="submit" color="primary">Make post</v-btn>
         </v-col>
         <v-col class="text-center" cols="6">
-          <v-btn color="error" @click="$router.go(-1)">Discard</v-btn>
+          <v-btn color="error" @click="$router.back()">Discard</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -73,5 +73,6 @@ export default {
 <style lang="scss">
 .v-dialog--active {
 	padding: 1rem 2rem;
+    background-color: floralwhite;
 }
 </style>
