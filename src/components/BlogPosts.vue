@@ -85,7 +85,7 @@
 <script>
 /* eslint-disable prettier/prettier */
 import { mapGetters } from "vuex";
-import UserAvatarText from "./UserAvatarText.vue";
+import UserAvatarText from "@/components/UserAvatarText.vue";
 
 export default {
 	mounted() {

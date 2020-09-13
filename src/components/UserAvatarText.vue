@@ -1,6 +1,8 @@
 <template>
   <v-list-item-avatar :size="size" :color="color">
-    <span class="white--text">{{ getUserInitial(author) }}</span>
+    <span class="white--text" id="userInitial">{{
+      getUserInitial(author)
+    }}</span>
   </v-list-item-avatar>
 </template>
 
@@ -30,4 +32,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+#userInitial {
+  margin-left: 0.8rem;
+}
+</style>

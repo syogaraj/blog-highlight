@@ -62,7 +62,7 @@
           </v-layout>
         </v-container>
         <v-spacer />
-        <v-icon @click="$router.back()">mdi-close</v-icon>
+        <v-icon @click="$router.go(-1)">mdi-close</v-icon>
       </v-toolbar>
       <v-form
         id="form"

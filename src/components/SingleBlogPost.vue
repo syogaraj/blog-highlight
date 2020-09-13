@@ -1,93 +1,9 @@
-<template>
-  <v-dialog overlay v-model="dialog" width="40%" persistent>
-    <div class="blog">
-      <div class="blogTitle">
-        <v-list-item-avatar size="40" :color="color">
-          <span class="white--text">{{
-            getUserInitial(blogDetail.author)
-          }}</span>
-        </v-list-item-avatar>
-        <h3>{{ blogDetail.title }}</h3>
-        <v-spacer />
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              @click="
-                $router.push({
-                  name: 'blog.edit',
-                  params: { id: blogDetail.id }
-                })
-              "
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </template>
-          <span>Edit this post</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              @click="
-                $router.push({
-                  name: 'blog.edit',
-                  params: { id: blogDetail.id }
-                })
-              "
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </template>
-          <span>Delete this post</span>
-        </v-tooltip>
-        <v-btn icon @click="$router.back()">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </div>
-      <p id="blogTime">
-        {{ blogDetail.author }} wrote on
-        {{ getFormattedTime(blogDetail.createdOn) }}
-      </p>
-      <v-divider />
-      <div class="blogContent" v-html="getContent(blogDetail.content)"></div>
-    </div>
-  </v-dialog>
-</template>
-
-<script>
-import { mapGetters } from "vuex";
-// import marked from "marked";
-export default {
-  data() {
-    return {
-      dialog: true,
-      blogID: this.$route.params.id
-      //   blogDetail: this.getBlog(this.blogID)
-    };
-  },
-  computed: {
-    ...mapGetters("blog", {
-      getBlog: "getBlogPost",
-      color: "getRandomColor",
-      getUserInitial: "getUserInitial",
-      getFormattedTime: "getFormattedTime",
-      getContent: "getMDContent"
-    }),
-    blogDetail() {
-      return this.$store.getters["blog/getBlogPost"](this.blogID);
-    }
-  }
-};
-</script>
-
 <style lang="scss" scoped>
 .blog {
-  padding-left: 5px;
+  & > div {
+    background: white;
+    padding-left: 5px;
+  }
 
   #blogTime {
     font-size: 12px;
@@ -133,3 +49,93 @@ export default {
   }
 }
 </style>
+
+<template>
+  <v-dialog
+    content-class="blog"
+    overlay
+    v-model="dialog"
+    width="40%"
+    persistent
+  >
+    <div>
+      <div class="blogTitle">
+        <user-avatar-text :author="blogDetail.author"></user-avatar-text>
+        <h3>{{ blogDetail.title }}</h3>
+        <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              @click="
+                $router.push({
+                  name: 'blog.edit',
+                  params: { id: blogDetail.id }
+                })
+              "
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit this post</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              @click="
+                $router.push({
+                  name: 'blog.edit',
+                  params: { id: blogDetail.id }
+                })
+              "
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </template>
+          <span>Delete this post</span>
+        </v-tooltip>
+        <v-btn icon @click="$router.go(-1)">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+      <p id="blogTime">
+        {{ blogDetail.author }} wrote on
+        {{ getFormattedTime(blogDetail.createdOn) }}
+      </p>
+      <v-divider />
+      <div class="blogContent" v-html="getContent(blogDetail.content)"></div>
+    </div>
+  </v-dialog>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import UserAvatarText from "@/components/UserAvatarText.vue";
+// import marked from "marked";
+export default {
+  components: {
+    UserAvatarText: UserAvatarText
+  },
+  data() {
+    return {
+      dialog: true,
+      blogID: this.$route.params.id
+    };
+  },
+  computed: {
+    ...mapGetters("blog", {
+      getBlog: "getBlogPost",
+      getFormattedTime: "getFormattedTime",
+      getContent: "getMDContent"
+    }),
+    blogDetail() {
+      return this.$store.getters["blog/getBlogPost"](this.blogID);
+    }
+  }
+};
+</script>
