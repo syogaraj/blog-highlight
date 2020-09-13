@@ -14,7 +14,6 @@ const routes = [
   },
   {
     path: "/blog",
-    // name: "Home",
     component: EmptyRouterView,
     children: [
       {
@@ -36,8 +35,16 @@ const routes = [
         components: {
           default: Blog,
           oneBlog: SingleBlogPost
+        }
+      },
+      {
+        path: "edit/:id",
+        name: "blog.edit",
+        components: {
+          default: Blog,
+          edit: CreateBlog
         },
-        props: true
+        props: { edit: true }
       }
     ]
   }

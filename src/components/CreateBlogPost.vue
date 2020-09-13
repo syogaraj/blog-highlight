@@ -1,78 +1,200 @@
-<template>
-  <!-- <div> -->
-  <v-dialog overlay v-model="dialog" width="40%" persistent>
-    <v-form ref="form" v-model="valid" @submit.prevent="submitHandler">
-      <v-text-field
-        :rules="nameRules"
-        prepend-icon="mdi-format-quote-open"
-        v-model="blogPost.title"
-        label="Give your post a title!"
-      ></v-text-field>
-      <v-text-field
-        :rules="nameRules"
-        prepend-icon="mdi-account"
-        v-model="blogPost.author"
-        label="Author"
-      ></v-text-field>
-      <v-textarea
-        :rules="nameRules"
-        prepend-icon="mdi-comment"
-        v-model="blogPost.content"
-        label="Your content goes here..."
-      ></v-textarea>
+<style lang="scss" scoped>
+.createDialog {
+  &.v-dialog--active {
+    background: white;
+  }
 
-      <v-row>
-        <v-col class="text-center" cols="6">
-          <v-btn type="submit" color="primary">Make post</v-btn>
-        </v-col>
-        <v-col class="text-center" cols="6">
-          <v-btn color="error" @click="$router.back()">Discard</v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-dialog>
-  <!-- </div> -->
+  .v-toolbar {
+    box-shadow: none;
+    border-bottom: 1px solid #847e7e;
+  }
+
+  #form {
+    background: white;
+    padding: 1rem 2rem;
+  }
+
+  .ck-content {
+    height: 45vh;
+  }
+
+  #editor {
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+    // margin-left: 1rem;
+  }
+
+  #blogPreview {
+    border: 1px solid #cfcfcf;
+    // max-height: 39vh;
+    height: 91%;
+    overflow: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  #contentPreviewHeader {
+    color: #847e7e;
+  }
+
+  .authorInput {
+    align-items: center;
+    justify-content: center;
+  }
+}
+</style>
+
+<template>
+  <div>
+    <v-dialog overlay v-model="dialog" content-class="createDialog" persistent>
+      <v-toolbar>
+        <v-container grid-list-md text-xs-center>
+          <v-layout row wrap class="mt-12">
+            <v-flex xs3>
+              <v-text-field
+                :rules="nameRules"
+                prepend-icon="mdi-format-quote-open"
+                v-model="blogPost.title"
+                label="My Post Title"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-spacer />
+        <v-icon @click="$router.back()">mdi-close</v-icon>
+      </v-toolbar>
+      <v-form
+        id="form"
+        ref="form"
+        v-model="valid"
+        @submit.prevent="submitHandler"
+      >
+        <v-row>
+          <v-col cols="6">
+            <ckeditor
+              ref="editor"
+              :editor="editor"
+              v-model="blogPost.content"
+              :config="editorConfig"
+              id="editor"
+            ></ckeditor>
+          </v-col>
+          <v-col cols="6">
+            <h4 id="contentPreviewHeader">Content Preview</h4>
+            <div id="blogPreview" v-html="content(blogPost.content)"></div>
+          </v-col>
+        </v-row>
+
+        <v-layout row wrap class="authorInput">
+          <v-flex xs3>
+            <v-text-field
+              :rules="nameRules"
+              label="Penned by"
+              v-model="blogPost.author"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs1 class="text-center mt-3">
+            <v-btn type="submit" color="primary">Publish!</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-form>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
 /* eslint-disable prettier/prettier */
+import { mapGetters } from "vuex";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+// import marked from "marked";
+// import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import InlineEditor from "@ckeditor/ckeditor5-editor-inline/src/inlineeditor";
+import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
+import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
+import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
+import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import BlockQuotePlugin from "@ckeditor/ckeditor5-block-quote/src/blockquote";
+import Markdown from "@ckeditor/ckeditor5-markdown-gfm/src/markdown";
+import ListStyle from "@ckeditor/ckeditor5-list/src/liststyle";
+
 export default {
+	components: {
+		ckeditor: CKEditor.component
+	},
+	props: {
+		edit: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
-            dialog: true,
-            valid: true,
+			dialog: true,
+			valid: true,
 			blogPost: {
 				title: "",
 				author: "",
-				content: ""
+				content: "**My awesome content here**.."
 			},
-			nameRules: [
-				v => !!v || "This field is required",
-			]
+			blogID: null,
+			nameRules: [v => !!v || "This field is required"],
+			editor: InlineEditor,
+			editorConfig: {
+				startupFocus: true,
+				plugins: [
+					EssentialsPlugin,
+					BoldPlugin,
+					ItalicPlugin,
+					ParagraphPlugin,
+					BlockQuotePlugin,
+					Markdown,
+					ListStyle
+				],
+				toolbar: {
+					items: [
+						"bold",
+						"italic",
+						"undo",
+						"redo",
+						"blockquote",
+						"bulletedList",
+						"numberedList"
+					]
+				}
+			}
 		};
-    },
-    methods: {
-        createBlogPost(){
-            console.log(this.blogPost);
-        },
-        submitHandler(){ 
-            let self = this
-            setTimeout(function () {
-                if (self.$refs.form.validate()){
-                    self.$store.dispatch('blog/createBlogPost', self.blogPost);
-                    self.$nextTick(() => {
-                        self.$router.push({"name": "blog"})
-                    });
-                }
-            })
-        }
-    }
+	},
+	methods: {
+		submitHandler() {
+			let self = this;
+			setTimeout(function() {
+				if (self.$refs.form.validate()) {
+					self.$store.dispatch("blog/createBlogPost", self.blogPost);
+					self.$nextTick(() => {
+						self.$router.push({ name: "blog" });
+					});
+				}
+			});
+		}
+	},
+	computed: {
+		...mapGetters("blog", {
+			getBlog: "getBlogPost",
+			content: "getMDContent"
+		}),
+		blogDetail() {
+			return this.$store.getters["blog/getBlogPost"](this.blogID);
+		}
+	},
+	created() {
+		// console.log(this.edit);
+		if (this.$route.params.id) {
+			this.blogID = this.$route.params.id;
+			console.log(this.blogID);
+			this.blogPost = this.blogDetail;
+		}
+	}
 };
 </script>
 
-<style lang="scss" scoped>
-.v-dialog--active {
-	padding: 1rem 2rem;
-    background-color: floralwhite;
-}
-</style>

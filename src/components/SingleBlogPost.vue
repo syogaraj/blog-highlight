@@ -1,7 +1,5 @@
 <template>
   <v-dialog overlay v-model="dialog" width="40%" persistent>
-    <!-- {{ blogID }} -->
-    <!-- {{ blogDetail }} -->
     <div class="blog">
       <div class="blogTitle">
         <v-list-item-avatar size="40" :color="color">
@@ -11,6 +9,42 @@
         </v-list-item-avatar>
         <h3>{{ blogDetail.title }}</h3>
         <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              @click="
+                $router.push({
+                  name: 'blog.edit',
+                  params: { id: blogDetail.id }
+                })
+              "
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit this post</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              @click="
+                $router.push({
+                  name: 'blog.edit',
+                  params: { id: blogDetail.id }
+                })
+              "
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </template>
+          <span>Delete this post</span>
+        </v-tooltip>
         <v-btn icon @click="$router.back()">
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -20,16 +54,14 @@
         {{ getFormattedTime(blogDetail.createdOn) }}
       </p>
       <v-divider />
-      <div class="blogContent">
-        <!-- {{ blogDetail.content }} -->
-        <p>{{ blogDetail.content }}</p>
-      </div>
+      <div class="blogContent" v-html="getContent(blogDetail.content)"></div>
     </div>
   </v-dialog>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+// import marked from "marked";
 export default {
   data() {
     return {
@@ -43,10 +75,10 @@ export default {
       getBlog: "getBlogPost",
       color: "getRandomColor",
       getUserInitial: "getUserInitial",
-      getFormattedTime: "getFormattedTime"
+      getFormattedTime: "getFormattedTime",
+      getContent: "getMDContent"
     }),
     blogDetail() {
-      console.log(this.$store.getters["blog/getBlogPost"]);
       return this.$store.getters["blog/getBlogPost"](this.blogID);
     }
   }
@@ -55,9 +87,7 @@ export default {
 
 <style lang="scss" scoped>
 .blog {
-  padding: 10px;
-  padding: 1rem 2rem;
-  background: white;
+  padding-left: 5px;
 
   #blogTime {
     font-size: 12px;
@@ -95,24 +125,11 @@ export default {
   }
 
   .blogContent {
-    display: flex;
     margin-top: 10px;
     padding: 15px;
     background: #f8f8f8;
     border: #f8f8f8 solid 1px;
     border-radius: 10px;
-    pre {
-      max-width: 100%;
-      overflow: auto;
-      padding: 10px;
-    }
-    p {
-      word-break: break-word;
-      text-align: justify;
-    }
   }
 }
-// .v-dialog--active {
-//   padding: 1rem 2rem;
-// }
 </style>

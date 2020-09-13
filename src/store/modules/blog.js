@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import * as fb from '@/firebase'
+import marked from "marked";
 const state = {
     blogPosts: []
 }
@@ -44,6 +45,20 @@ const getters = {
     getFormattedTime: () => (createdOn) => {
         let date = new Date(createdOn.seconds*1000);
         return date.toLocaleDateString();
+    },
+
+    getMDContent: () => (content) => {
+        marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: true,
+            breaks: true,
+            pedantic: false,
+            sanitize: true,
+            smartLists: true,
+            smartypants: false
+        });
+        return marked(content)
     }
 
 }
@@ -62,7 +77,6 @@ const actions = {
     },
 
     async createBlogPost({ state, dispatch, commit }, blogPost) {
-        blogPost.content = blogPost.content.replace('\n', '<br/>')
         await fb.postsCollection.add({
             createdOn: new Date(),
             title: blogPost.title,
