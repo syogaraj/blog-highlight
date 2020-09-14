@@ -52,7 +52,7 @@ const routes = [
         }
       },
       {
-        path: "search",
+        path: "search/:text",
         name: "blog.search",
         components: {
           default: Blog,
@@ -60,7 +60,7 @@ const routes = [
         },
         props: {
           default: "",
-          search: route => ({ searchText: `${route.query.text}`})
+          search: route => ({ searchText: `${route.params.text}`})
         }
       }
     ]

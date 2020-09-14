@@ -186,7 +186,7 @@ export default {
       console.log(this.selectedText);
       this.$router.push({
         name: "blog.search",
-        query: { text: this.selectedText }
+        params: { text: this.selectedText }
       });
     }
   },

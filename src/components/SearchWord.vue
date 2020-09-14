@@ -90,15 +90,15 @@
     persistent
   >
     <v-toolbar>
-      <v-toolbar-title>Search results for {{ searchText }}</v-toolbar-title>
+      <v-toolbar-title>Search results for <strong>{{ searchText }}</strong></v-toolbar-title>
       <v-spacer />
       <v-icon @click="$router.go(-1)">mdi-close</v-icon>
     </v-toolbar>
     <v-divider />
     <div id="listItem">
       <div
-        v-for="item in blogSearchContents"
-        :key="item.id"
+        v-for="(item, index) in blogSearchContents"
+        :key="index"
         @click="$router.push({ name: 'blog.oneBlog', params: { id: item.id } })"
       >
         <v-list-item>
