@@ -1,9 +1,20 @@
 <style lang="scss" scoped>
 .highlight {
+  background: white;
+  overflow: none;
+  & > .v-toolbar {
+    box-shadow: none;
+  }
   & > div {
     background: white;
     // padding-left: 5px;
     padding: 1rem 2rem;
+  }
+
+  #listItem {
+    max-height: 80vh;
+    overflow: auto;
+    cursor: pointer;
   }
 
   #blogTime {
@@ -78,16 +89,13 @@
     width="40%"
     persistent
   >
-    <div>
-      <div class="searchTitle">
-        <!-- {{ searchText }} -->
-        <h3>Search results for {{ searchText }}</h3>
-        <v-spacer />
-        <v-btn @click="$router.go(-1)">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </div>
-      <v-divider />
+    <v-toolbar>
+      <v-toolbar-title>Search results for {{ searchText }}</v-toolbar-title>
+      <v-spacer />
+      <v-icon @click="$router.go(-1)">mdi-close</v-icon>
+    </v-toolbar>
+    <v-divider />
+    <div id="listItem">
       <div
         v-for="item in blogSearchContents"
         :key="item.id"
@@ -125,20 +133,6 @@ export default {
   },
   computed: {
     blogSearchContents() {
-      //   return [
-      //     {
-      //       id: "",
-      //       meta:
-      //         "lorem eipselfmskl fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlighted'>text</span>",
-      //       author: "me"
-      //     },
-      //     {
-      //       id: "sefse",
-      //       meta:
-      //         "lorem eipselfmskl <span class='highlighted'>text</span> fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlight'>text</span>",
-      //       author: "me"
-      //     }
-      //   ];
       return this.$store.getters["blog/getSnippedContent"](this.searchText);
     }
   }
