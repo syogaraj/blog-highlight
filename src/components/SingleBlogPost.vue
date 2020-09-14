@@ -136,10 +136,15 @@ export default {
   methods: {
     deleteBlogPost(blogID) {
       let self = this;
-      this.$store.dispatch("blog/deleteBlogPost", blogID);
-      this.$nextTick(() => {
-        self.$router.push({ name: "blog" });
-      });
+      this.$store
+        .dispatch("blog/deleteBlogPost", blogID)
+        .then(() => {
+          self.$router.push({ name: "blog" });
+          alert("Blog Post deleted!");
+        })
+        .catch(() => {
+          alert("Blog post cannot be deleted");
+        });
     }
   }
 };
