@@ -15,6 +15,12 @@
     max-height: 80vh;
     overflow: auto;
     cursor: pointer;
+
+    p ::v-deep span.highlighted {
+      font-weight: bold;
+      color: red;
+      background: #ffd8aa82;
+    }
   }
 
   #blogTime {
@@ -72,12 +78,6 @@
       color: white;
     }
   }
-
-  span.highlighted {
-    font-weight: bold;
-    color: red;
-    background: bisque;
-  }
 }
 </style>
 
@@ -105,6 +105,7 @@
       >
         <v-list-item>
           <v-list-item-content>
+            <!-- <p v-html="getMDContent(item.meta)"></p> -->
             <p v-html="item.meta"></p>
           </v-list-item-content>
           <user-avatar-text :author="item.author"></user-avatar-text>
@@ -116,7 +117,7 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import UserAvatarText from "@/components/UserAvatarText.vue";
 export default {
   components: {
@@ -134,6 +135,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("blog", {
+      getMDContent: "getMDContent"
+    }),
     blogSearchContents() {
       return this.$store.getters["blog/getSnippedContent"](this.searchText);
     }
