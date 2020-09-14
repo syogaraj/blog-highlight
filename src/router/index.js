@@ -3,8 +3,9 @@ import VueRouter from "vue-router";
 import EmptyRouterView from "../views/EmptyRouterView.vue";
 import Blog from "../components/BlogPosts.vue";
 import SingleBlogPost from "../components/SingleBlogPost.vue";
-import CreateBlog from "../components/CreateBlogPost.vue";
-
+import NewBlogPost from "../views/NewBlogPost.vue";
+import EditBlogPost from "../views/EditBlogPost.vue";
+ 
 Vue.use(VueRouter);
 
 const routes = [
@@ -26,7 +27,7 @@ const routes = [
         name: "blog.create",
         components: {
           default: Blog,
-          create: CreateBlog
+          create: NewBlogPost
         }
       },
       {
@@ -42,9 +43,13 @@ const routes = [
         name: "blog.edit",
         components: {
           default: Blog,
-          edit: CreateBlog
+          edit: EditBlogPost
         },
-        props: { edit: true }
+        props: {
+          default: {},
+          edit: route => ({ edit: true, blogID: `${route.params.id}` })
+        }
+        // props: true
       }
     ]
   }

@@ -62,7 +62,7 @@
           </v-layout>
         </v-container>
         <v-spacer />
-        <v-icon @click="$router.go(-1)">mdi-close</v-icon>
+        <v-icon @click="$emit('discard')">mdi-close</v-icon>
       </v-toolbar>
       <v-form
         id="form"
@@ -95,7 +95,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs1 class="text-center mt-3">
-            <v-btn type="submit" color="primary">Publish!</v-btn>
+            <v-btn type="submit" color="primary">{{ publishString }}</v-btn>
           </v-flex>
         </v-layout>
       </v-form>
@@ -107,8 +107,6 @@
 /* eslint-disable prettier/prettier */
 import { mapGetters } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-// import marked from "marked";
-// import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import InlineEditor from "@ckeditor/ckeditor5-editor-inline/src/inlineeditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
 import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
@@ -126,18 +124,22 @@ export default {
 		edit: {
 			type: Boolean,
 			default: false
-		}
+    },
+    blogID: {
+      type: String,
+      default: ""
+    }
 	},
 	data() {
 		return {
 			dialog: true,
-			valid: true,
+      valid: true,
+      publishString: "Publish",
 			blogPost: {
 				title: "",
 				author: "",
 				content: "**My awesome content here**.."
 			},
-			blogID: null,
 			nameRules: [v => !!v || "This field is required"],
 			editor: InlineEditor,
 			editorConfig: {
@@ -170,30 +172,23 @@ export default {
 			let self = this;
 			setTimeout(function() {
 				if (self.$refs.form.validate()) {
-					self.$store.dispatch("blog/createBlogPost", self.blogPost);
-					self.$nextTick(() => {
-						self.$router.push({ name: "blog" });
-					});
+          self.$emit('publish', self.blogPost);
 				}
 			});
 		}
 	},
 	computed: {
 		...mapGetters("blog", {
-			getBlog: "getBlogPost",
-			content: "getMDContent"
+      content: "getMDContent",
+      getBlog: "getBlogPost"
 		}),
-		blogDetail() {
-			return this.$store.getters["blog/getBlogPost"](this.blogID);
-		}
 	},
 	created() {
-		// console.log(this.edit);
-		if (this.$route.params.id) {
-			this.blogID = this.$route.params.id;
-			console.log(this.blogID);
-			this.blogPost = this.blogDetail;
-		}
+    console.log(this.blogID);
+    if(this.edit) {
+      this.blogPost = JSON.parse(JSON.stringify(this.getBlog(this.blogID)));
+      this.publishString = "Update post";
+    }
 	}
 };
 </script>

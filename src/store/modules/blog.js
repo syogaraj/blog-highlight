@@ -86,6 +86,15 @@ const actions = {
         dispatch("fetchBlogPosts");
     },
 
+    async updateBlogPost({dispatch}, blogPost) {
+        await fb.postsCollection.doc(blogPost.id).update({
+            title: blogPost.title,
+            author: blogPost.author,
+            content: blogPost.content,
+        });
+        dispatch("fetchBlogPosts");
+    },
+
     async deleteBlogPost({ dispatch }, blogID) {
         await fb.postsCollection.doc(blogID).delete();
         dispatch("fetchBlogPosts");
