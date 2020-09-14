@@ -95,7 +95,7 @@
       >
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title v-html="item.meta"></v-list-item-title>
+            <p v-html="item.meta"></p>
           </v-list-item-content>
           <user-avatar-text :author="item.author"></user-avatar-text>
         </v-list-item>
@@ -125,21 +125,21 @@ export default {
   },
   computed: {
     blogSearchContents() {
-      return [
-        {
-          id: "",
-          meta:
-            "lorem eipselfmskl fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlighted'>text</span>",
-          author: "me"
-        },
-        {
-          id: "sefse",
-          meta:
-            "lorem eipselfmskl <span class='highlighted'>text</span> fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlight'>text</span>",
-          author: "me"
-        }
-      ];
-      //   return this.$store.getters["blog/getSnippedContent"](this.searchText);
+      //   return [
+      //     {
+      //       id: "",
+      //       meta:
+      //         "lorem eipselfmskl fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlighted'>text</span>",
+      //       author: "me"
+      //     },
+      //     {
+      //       id: "sefse",
+      //       meta:
+      //         "lorem eipselfmskl <span class='highlighted'>text</span> fskefn sknskej fnsekfn sefn skfnsekfn sekfneskfnsefkjsenfksenfksefnefngns ksenfesknf <span class='highlight'>text</span>",
+      //       author: "me"
+      //     }
+      //   ];
+      return this.$store.getters["blog/getSnippedContent"](this.searchText);
     }
   }
 };

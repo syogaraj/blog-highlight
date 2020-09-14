@@ -59,6 +59,32 @@ const getters = {
             smartypants: false
         });
         return marked(content)
+    },
+
+    getSnippedContent: (state) => (searchText) => {
+        let result = [];
+        let noOfChars = 100
+        state.blogPosts.forEach( blog => {
+            let content = blog.content;
+            let searchIndices = [...content.matchAll(new RegExp(searchText, 'gi'))].map(s => s.index);
+            for(let i=0; i<searchIndices.length; i++) {
+                if(searchIndices[i]-noOfChars < 0 || searchIndices[i]+noOfChars > content.length){
+                    continue;
+                }
+                let metaObj = {}
+                let start = ((searchIndices[i] - noOfChars) < searchIndices[i-1]) ? searchIndices[i-1]+10 : searchIndices[i]-noOfChars;
+                let end = ((searchIndices[i] + noOfChars) > searchIndices[i+1]) ? searchIndices[i+1]-10: searchIndices[i]+noOfChars;
+                let prefix = "..." + content.substring(start, searchIndices[i]-1);
+                let searchContent = "<span class='highlighted'> "+ content.substring(searchIndices[i], searchIndices[i]+searchText.length) +"</span>"
+                let suffix = content.substring(searchIndices[i]+searchText.length, end) + "...";
+                let constructedMeta = prefix + searchContent + suffix;
+                metaObj.meta = constructedMeta;
+                metaObj.id = blog.id;
+                metaObj.author = blog.author;
+                result.push(metaObj);
+            }
+        });
+        return result;
     }
 
 }
