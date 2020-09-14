@@ -60,7 +60,7 @@ const routes = [
         },
         props: {
           default: "",
-          search: route => ({ searchText: `${route.params.text}`})
+          search: route => ({ searchText: `${route.params.text}` })
         }
       }
     ]

@@ -90,7 +90,9 @@
     persistent
   >
     <v-toolbar>
-      <v-toolbar-title>Search results for <strong>{{ searchText }}</strong></v-toolbar-title>
+      <v-toolbar-title
+        >Search results for <strong>{{ searchText }}</strong></v-toolbar-title
+      >
       <v-spacer />
       <v-icon @click="$router.go(-1)">mdi-close</v-icon>
     </v-toolbar>
