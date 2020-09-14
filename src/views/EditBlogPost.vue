@@ -38,7 +38,8 @@ export default {
   methods: {
     updatePost(blogDetail) {
       console.log(blogDetail);
-      this.$store.dispatch("blog/updateBlogPost", blogDetail)
+      this.$store
+        .dispatch("blog/updateBlogPost", blogDetail)
         .then(() => {
           alert("Blog post updated"); // TODO: do this in a snackbar
         })

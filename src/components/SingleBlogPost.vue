@@ -48,6 +48,19 @@
     border: #f8f8f8 solid 1px;
     border-radius: 10px;
   }
+
+  #highlighter {
+    position: absolute;
+    padding: 0px;
+    width: 2vw;
+    background: #208d20;
+    border-radius: 50%;
+    opacity: 0.9;
+
+    & > button {
+      color: white;
+    }
+  }
 }
 </style>
 
@@ -104,7 +117,25 @@
         {{ getFormattedTime(blogDetail.createdOn) }}
       </p>
       <v-divider />
-      <div class="blogContent" v-html="getContent(blogDetail.content)"></div>
+      <div
+        class="blogContent"
+        ref="blogContent"
+        v-html="getContent(blogDetail.content)"
+      ></div>
+    </div>
+    <div
+      id="highlighter"
+      v-if="selectedText"
+      :style="{ top: highlighterStyle.top, left: highlighterStyle.left }"
+    >
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon @click="highlightText()" v-bind="attrs" v-on="on">
+            <v-icon>mdi-format-color-highlight</v-icon>
+          </v-btn>
+        </template>
+        <span>Search and highlight this text on all blog posts.</span>
+      </v-tooltip>
     </div>
   </v-dialog>
 </template>
@@ -120,7 +151,12 @@ export default {
   data() {
     return {
       dialog: true,
-      blogID: this.$route.params.id
+      blogID: this.$route.params.id,
+      selectedText: "",
+      highlighterStyle: {
+        top: 0,
+        left: 0
+      }
     };
   },
   computed: {
@@ -145,7 +181,24 @@ export default {
         .catch(() => {
           alert("Blog post cannot be deleted");
         });
+    },
+    highlightText() {
+      console.log(this.selectedText);
     }
+  },
+  mounted() {
+    //this.$refs.blogContent
+    document.addEventListener("mouseup", event => {
+      this.highlighterStyle.left = `${event.clientX - 5}px`;
+      this.highlighterStyle.top = `${event.clientY + 5}px`;
+      let windowSelectionString = window.getSelection().toString();
+      const regex = "^(?:[a-z]|[A-Z]|[0-9])+$";
+      if (windowSelectionString.match(regex)) {
+        this.selectedText = windowSelectionString;
+      } else {
+        this.selectedText = "";
+      }
+    });
   }
 };
 </script>

@@ -5,7 +5,7 @@ import Blog from "../components/BlogPosts.vue";
 import SingleBlogPost from "../components/SingleBlogPost.vue";
 import NewBlogPost from "../views/NewBlogPost.vue";
 import EditBlogPost from "../views/EditBlogPost.vue";
- 
+
 Vue.use(VueRouter);
 
 const routes = [
