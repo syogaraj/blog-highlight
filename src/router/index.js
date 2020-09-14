@@ -5,6 +5,7 @@ import Blog from "../components/BlogPosts.vue";
 import SingleBlogPost from "../components/SingleBlogPost.vue";
 import NewBlogPost from "../views/NewBlogPost.vue";
 import EditBlogPost from "../views/EditBlogPost.vue";
+import BlogSearch from "../views/SearchHighlight.vue";
 
 Vue.use(VueRouter);
 
@@ -49,7 +50,18 @@ const routes = [
           default: {},
           edit: route => ({ edit: true, blogID: `${route.params.id}` })
         }
-        // props: true
+      },
+      {
+        path: "search",
+        name: "blog.search",
+        components: {
+          default: Blog,
+          search: BlogSearch
+        },
+        props: {
+          default: "",
+          search: route => ({ searchText: `${route.query.text}`})
+        }
       }
     ]
   }

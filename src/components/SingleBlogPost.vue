@@ -184,6 +184,10 @@ export default {
     },
     highlightText() {
       console.log(this.selectedText);
+      this.$router.push({
+        name: "blog.search",
+        query: { text: this.selectedText }
+      });
     }
   },
   mounted() {
