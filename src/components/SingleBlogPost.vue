@@ -2,7 +2,8 @@
 .blog {
   & > div {
     background: white;
-    padding-left: 5px;
+    // padding-left: 5px;
+    padding: 1rem 2rem;
   }
 
   #blogTime {
@@ -85,12 +86,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
-              @click="
-                $router.push({
-                  name: 'blog.edit',
-                  params: { id: blogDetail.id }
-                })
-              "
+              @click="deleteBlogPost(blogDetail.id)"
               v-bind="attrs"
               v-on="on"
             >
@@ -135,6 +131,15 @@ export default {
     }),
     blogDetail() {
       return this.$store.getters["blog/getBlogPost"](this.blogID);
+    }
+  },
+  methods: {
+    deleteBlogPost(blogID) {
+      let self = this;
+      this.$store.dispatch("blog/deleteBlogPost", blogID);
+      this.$nextTick(() => {
+        self.$router.push({ name: "blog" });
+      });
     }
   }
 };

@@ -84,6 +84,11 @@ const actions = {
             content: blogPost.content,
         })
         dispatch("fetchBlogPosts");
+    },
+
+    async deleteBlogPost({ dispatch }, blogID) {
+        await fb.postsCollection.doc(blogID).delete();
+        dispatch("fetchBlogPosts");
     }
 }
 
