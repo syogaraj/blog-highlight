@@ -71,7 +71,7 @@
         @submit.prevent="submitHandler"
       >
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12">
             <ckeditor
               ref="editor"
               :editor="editor"
@@ -79,10 +79,6 @@
               :config="editorConfig"
               id="editor"
             ></ckeditor>
-          </v-col>
-          <v-col cols="6">
-            <h4 id="contentPreviewHeader">Content Preview</h4>
-            <div id="blogPreview" v-html="content(blogPost.content)"></div>
           </v-col>
         </v-row>
 
